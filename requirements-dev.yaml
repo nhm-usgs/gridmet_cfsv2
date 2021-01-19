@@ -1,0 +1,32 @@
+name: gmetl_cfs
+channels:
+  - conda-forge
+# These are required for developing the package (running the tests, building
+# the documentation) but not necessarily required for _using_ it.
+dependencies:
+  - codecov
+  - coverage
+  - flake8
+  - pytest
+  - sphinx
+  - doc8
+  - rstcheck
+# These are dependencies of various sphinx extensions for documentation.
+  - ipython
+  - matplotlib
+  - numpydoc
+  - sphinx-copybutton
+  - sphinx_rtd_theme
+#
+  - dask
+  - numpy
+  - xarray
+  - pandas
+  - geopandas
+  - descartes
+  - netcdf4
+  - requests
+  - jupyterlab
+  - scipy
+  - metpy
+

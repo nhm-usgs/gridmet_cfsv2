@@ -1,0 +1,16 @@
+# List required packages in this file, one per line.
+numpy
+xarray
+pandas
+geopandas
+descartes
+requests
+shapely
+gdal
+fiona
+pyproj
+rtree
+six
+jupyterlab
+scipy
+metpy
