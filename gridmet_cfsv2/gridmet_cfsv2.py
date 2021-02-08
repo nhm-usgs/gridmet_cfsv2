@@ -23,6 +23,7 @@ class Gridmet():
         "precipitation_amount": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
         "wind_speed": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
         "specific_humidity": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
+        "surface_downwelling_shortwave_flux_in_air": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/"
     }
     NCF_NAME = {
         "daily_maximum_temperature": "cfsv2_metdata_forecast_tmmx_daily",
@@ -30,6 +31,7 @@ class Gridmet():
         "precipitation_amount": "cfsv2_metdata_forecast_pr_daily",
         "wind_speed": "cfsv2_metdata_forecast_vs_daily",
         "specific_humidity": "cfsv2_metdata_forecast_sph_daily",
+        "surface_downwelling_shortwave_flux_in_air": "cfsv2_metdata_forecast_srad_daily"
     }
     ENS_TYPE = {
         0: 'Ensemble Median',
@@ -40,11 +42,6 @@ class Gridmet():
         
         self._start_date = None
         self._end_date = None
-
-        self._m_tmin_data = None
-        self._m_tmax_data = None
-        self._m_prcp_data = None
-
         self.type = type 
 
         if cache_dir is None:
@@ -57,6 +54,7 @@ class Gridmet():
         self._ds_prcp = None
         self._ds_sph = None
         self._ds_ws = None
+        self._ds_srad = None
 
         if not lazy:
             for name in self.PATH:
@@ -169,6 +167,12 @@ class Gridmet():
                 return self._ds_sph
             else:
                 return self._ds_sph
+        elif name == 'surface_downwelling_shortwave_flux_in_air':
+            if self._ds_srad is None:
+                self._ds_srad = self._fetch_and_open(name)
+                return self._ds_srad
+            else:
+                return self._ds_srad
 
     @property
     def tmax(self)->xr:
@@ -192,8 +196,13 @@ class Gridmet():
     def specific_humidity(self):
         return self._lazy_load('specific_humidity')
 
+    @property
     def wind_speed(self):
         return self._lazy_load('wind_speed')
+
+    @property
+    def srad(self):
+        return self._lazy_load('surface_downwelling_shortwave_flux_in_air')
 
     @classmethod
     def fetch_var(cls, name, cache_dir, type):
