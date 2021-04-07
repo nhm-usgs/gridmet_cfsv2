@@ -1,5 +1,7 @@
 import gridmet_cfsv2 as gm
-import  numpy as np
+import numpy as np
+
+
 m = gm.Gridmet(type=0)
 ds = m.tmin
 ds.head()

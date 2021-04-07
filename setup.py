@@ -37,7 +37,8 @@ setup(
     name='gridmet-cfsv2',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
-    description="Extract gridMET version of NOAA CFSv2 forecasts, Translate to oNHM HRUs, and Load to netCDF file (ETL)",
+    description=("Extract gridMET version of NOAA CFSv2 forecasts,"
+                 " Translate to oNHM HRUs, and Load to netCDF file (ETL)"),
     long_description=readme,
     author="Richard McDonald",
     author_email='rmcd@usgs.gov',

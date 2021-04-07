@@ -4,9 +4,6 @@ import click
 import numpy as np
 import sys
 
-from gridmet_bmi import __version__
-from gridmet_bmi.gridmet import Gridmet
-
 
 def yesterday():
     return datetime.date.isoformat(datetime.date.today() - datetime.timedelta(days=1))
@@ -22,7 +19,6 @@ def validate_date(date_string):
 
 
 @click.command()
-@click.version_option(version=__version__)
 @click.option(
     '-q',
     '--quiet',
@@ -77,8 +73,8 @@ def validate_date(date_string):
 def main(quiet, verbose, config_file, start, end, var, hrumap, hru_ids, wght_file):
     print('test')
     # fetcher = Gridmet(start, end_date=end, hrumap=hrumap, hru_id=hru_ids, wght_file=wght_file)
-    fetcher = Gridmet(config_file=config_file)
-    print(getattr(fetcher, var))
+    # fetcher = Gridmet(config_file=config_file)
+    # print(getattr(fetcher, var))
 
 
 if __name__ == "__main__":

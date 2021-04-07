@@ -5,10 +5,7 @@ import urllib
 from pathlib import Path
 import itertools
 import xarray as xr
-import numpy as np
 import glob
-
-from .helpers import np_get_wval, getaverage
 
 
 class Gridmet():
@@ -37,10 +34,10 @@ class Gridmet():
     }
 
     def __init__(self, lazy=True, cache_dir=None, type=0):
-        
+
         self._start_date = None
         self._end_date = None
-        self.type = type 
+        self.type = type
 
         if cache_dir is None:
             cache_dir = Path("~/.gridmet")
@@ -129,7 +126,7 @@ class Gridmet():
     def _fetch_and_open(self, name):
         self._cache_dir.mkdir(exist_ok=True)
         return Gridmet.fetch_var(
-                name, 
+                name,
                 self._cache_dir,
                 self.type
             )
@@ -173,7 +170,7 @@ class Gridmet():
                 return self._ds_srad
 
     @property
-    def tmax(self)->xr:
+    def tmax(self) -> xr:
         tname = "daily_maximum_temperature"
         ds = self._lazy_load(tname)
         return ds
@@ -212,9 +209,9 @@ class Gridmet():
             raise ValueError(
                 f'The specified type {type} is not in {cls.ENS_TYPE}'
             )
-        fcst = ('00','06','12','18')
-        ensb = ('1','2','3','4')
-        day = ('0','1','2')
+        fcst = ('00', '06', '12', '18')
+        ensb = ('1', '2', '3', '4')
+        day = ('0', '1', '2')
         if type == 0:
             fext = '_median.nc'
             dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + ".nc"
