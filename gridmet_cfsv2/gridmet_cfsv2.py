@@ -3,8 +3,6 @@ import datetime
 import re
 import urllib
 from pathlib import Path
-# import pandas as pd
-
 import itertools
 import xarray as xr
 import numpy as np

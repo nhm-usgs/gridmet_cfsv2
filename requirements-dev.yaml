@@ -18,15 +18,7 @@ dependencies:
   - sphinx-copybutton
   - sphinx_rtd_theme
 #
-  - dask
   - numpy
   - xarray
-  - pandas
-  - geopandas
-  - descartes
-  - netcdf4
-  - requests
-  - jupyterlab
-  - scipy
-  - metpy
+
 
