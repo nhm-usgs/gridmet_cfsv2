@@ -9,24 +9,25 @@ import glob
 
 
 class Gridmet():
-    SCHEME = "http"
-    NETLOC = "thredds.northwestknowledge.net:8080"
+    SCHEME = 'http'
+    NETLOC = 'thredds.northwestknowledge.net:8080'
     SOURCE = 'http://thredds.northwestknowledge.net:8080'
     PATH = {
-        "daily_maximum_temperature": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
-        "daily_minimum_temperature": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
-        "precipitation_amount": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
-        "wind_speed": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
-        "specific_humidity": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/",
-        "surface_downwelling_shortwave_flux_in_air": "/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/"
+        'daily_maximum_temperature': '/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/',
+        'daily_minimum_temperature': '/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/',
+        'precipitation_amount': '/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/',
+        'wind_speed': '/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/',
+        'specific_humidity': '/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE/cfsv2_metdata_90day/',
+        'surface_downwelling_shortwave_flux_in_air': '/thredds/dodsC/NWCSC_INTEGRATED_SCENARIOS_ALL_CLIMATE'
+        '/cfsv2_metdata_90day/'
     }
     NCF_NAME = {
-        "daily_maximum_temperature": "cfsv2_metdata_forecast_tmmx_daily",
-        "daily_minimum_temperature": "cfsv2_metdata_forecast_tmmn_daily",
-        "precipitation_amount": "cfsv2_metdata_forecast_pr_daily",
-        "wind_speed": "cfsv2_metdata_forecast_vs_daily",
-        "specific_humidity": "cfsv2_metdata_forecast_sph_daily",
-        "surface_downwelling_shortwave_flux_in_air": "cfsv2_metdata_forecast_srad_daily"
+        'daily_maximum_temperature': 'cfsv2_metdata_forecast_tmmx_daily',
+        'daily_minimum_temperature': 'cfsv2_metdata_forecast_tmmn_daily',
+        'precipitation_amount': 'cfsv2_metdata_forecast_pr_daily',
+        'wind_speed': 'cfsv2_metdata_forecast_vs_daily',
+        'specific_humidity': 'cfsv2_metdata_forecast_sph_daily',
+        'surface_downwelling_shortwave_flux_in_air': 'cfsv2_metdata_forecast_srad_daily'
     }
     ENS_TYPE = {
         0: 'Ensemble Median',
@@ -40,7 +41,7 @@ class Gridmet():
         self.type = type
 
         if cache_dir is None:
-            cache_dir = Path("~/.gridmet")
+            cache_dir = Path('~/.gridmet')
         self._cache_dir = Path(cache_dir).expanduser().resolve()
 
         self._dataset = None
@@ -69,18 +70,18 @@ class Gridmet():
         # if var not in ['tmax', 'tmin', 'prcp']
 
         if cache_dir is None:
-            cache_dir = Path("~/.gridmet")
+            cache_dir = Path('~/.gridmet')
         cache_dir = Path(cache_dir).expanduser().resolve()
 
-        pattern = r"(?P<var>[a-z_]*)_(?P<start>[0-9\-]*)_(?P<end>[0-9\-]*)\.nc"
+        pattern = r'(?P<var>[a-z_]*)_(?P<start>[0-9\-]*)_(?P<end>[0-9\-]*)\.nc'
 
         cached_files = []
-        for fname in [p.name for p in cache_dir.glob("*.nc")]:
+        for fname in [p.name for p in cache_dir.glob('*.nc')]:
             match = re.match(pattern, fname)
-            if match and match.group("var") in Gridmet.PATH:
+            if match and match.group('var') in Gridmet.PATH:
                 try:
-                    datetime.date.fromisoformat(match.group("start"))
-                    datetime.date.fromisoformat(match.group("end"))
+                    datetime.date.fromisoformat(match.group('start'))
+                    datetime.date.fromisoformat(match.group('end'))
                 except ValueError:
                     pass
                 else:
@@ -100,7 +101,7 @@ class Gridmet():
     # @classmethod
     # def from_today(cls, days, lazy=True):
     #     if days <= 0:
-    #         raise ValueError("number of days must be positive ({0})".format(days))
+    #         raise ValueError('number of days must be positive ({0})'.format(days))
 
     #     end_date = datetime.date.today()
     #     start_date = end_date - datetime.timedelta(days=days)
@@ -171,19 +172,19 @@ class Gridmet():
 
     @property
     def tmax(self) -> xr:
-        tname = "daily_maximum_temperature"
+        tname = 'daily_maximum_temperature'
         ds = self._lazy_load(tname)
         return ds
 
     @property
     def tmin(self):
-        tname = "daily_minimum_temperature"
+        tname = 'daily_minimum_temperature'
         ds = self._lazy_load(tname)
         return ds
 
     @property
     def prcp(self):
-        tname = "precipitation_amount"
+        tname = 'precipitation_amount'
         ds = self._lazy_load(tname)
         return ds
 
@@ -203,7 +204,7 @@ class Gridmet():
     def fetch_var(cls, name, cache_dir, type):
         if name not in cls.PATH:
             raise ValueError(
-                "name not understood ({0} not in {1})".format(name, ", ".join(cls.PATH))
+                'name not understood ({0} not in {1})'.format(name, ', '.join(cls.PATH))
             )
         if type not in cls.ENS_TYPE:
             raise ValueError(
@@ -214,7 +215,7 @@ class Gridmet():
         day = ('0', '1', '2')
         if type == 0:
             fext = '_median.nc'
-            dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + ".nc"
+            dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + '.nc'
             fname = cls.NCF_NAME[name] + fext
 
             fobj = xr.open_dataset(dsname+'#fillmismatch', engine='netcdf4', mask_and_scale=True)
@@ -242,7 +243,7 @@ class Gridmet():
     @classmethod
     def data_url(cls, name):
         return urllib.parse.urlunparse(
-            (cls.SCHEME, cls.NETLOC, cls.PATH[name], "", "", "")
+            (cls.SCHEME, cls.NETLOC, cls.PATH[name], '', '', '')
         )
 
     def update(self):
