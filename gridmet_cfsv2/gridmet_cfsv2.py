@@ -31,7 +31,10 @@ class Gridmet():
     }
     ENS_TYPE = {
         0: 'Ensemble Median',
-        1: 'Ensemble All'
+        1: 'Ensemble All',
+        2: 'Ensemble Day 2',
+        3: 'Ensemble Day 1',
+        4: 'Ensemble Day 0'
     }
 
     def __init__(self, lazy=True, cache_dir=None, type=0):
@@ -239,6 +242,16 @@ class Gridmet():
             gname = str(cache_dir / (cls.NCF_NAME[name] + '_[0-9]*.nc'))
             paths = glob.glob(gname)
             return xr.open_mfdataset(paths, combine='nested', concat_dim='time')
+
+        elif type in [2, 3, 4]:
+            file_list = []
+            for tfcst, tensb in itertools.product(fcst, ensb):
+                tday = int(type)
+                fext = f'_{tfcst}_{tensb}_{tday}.nc'
+                dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + fext+'#fillmismatch'
+                file_list.append(dsname)
+            print(file_list)
+            return xr.open_mfdataset(file_list, combine='nested', concat_dim='time', parallel=True)
 
     @classmethod
     def data_url(cls, name):
