@@ -250,7 +250,7 @@ class Gridmet():
                 fext = f'_{tfcst}_{tensb}_{tday}.nc'
                 dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + fext+'#fillmismatch'
                 file_list.append(dsname)
-            print(file_list)
+            # print(file_list)
             return xr.open_mfdataset(file_list, combine='nested', concat_dim='time', parallel=True)
 
     @classmethod
