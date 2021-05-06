@@ -30,11 +30,11 @@ class Gridmet():
         'surface_downwelling_shortwave_flux_in_air': 'cfsv2_metdata_forecast_srad_daily'
     }
     ENS_TYPE = {
-        0: 'Ensemble Median',
-        1: 'Ensemble All',
+        0: 'Ensemble Day 0',
+        1: 'Ensemble Day 1',
         2: 'Ensemble Day 2',
-        3: 'Ensemble Day 1',
-        4: 'Ensemble Day 0'
+        3: 'Ensemble All',
+        4: 'Ensemble Median'
     }
 
     def __init__(self, lazy=True, cache_dir=None, type=0):
@@ -216,7 +216,7 @@ class Gridmet():
         fcst = ('00', '06', '12', '18')
         ensb = ('1', '2', '3', '4')
         day = ('0', '1', '2')
-        if type == 0:
+        if type == 4:
             fext = '_median.nc'
             dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + '.nc'
             fname = cls.NCF_NAME[name] + fext
@@ -229,7 +229,7 @@ class Gridmet():
 
             return xr.open_dataset(gname)
 
-        elif type == 1:
+        elif type == 3:
             for tfcst, tensb, tday in itertools.product(fcst, ensb, day):
                 # print(tfcst,tensb, tday)
                 fext = f'_{tfcst}_{tensb}_{tday}.nc'
@@ -243,7 +243,7 @@ class Gridmet():
             paths = glob.glob(gname)
             return xr.open_mfdataset(paths, combine='nested', concat_dim='time')
 
-        elif type in [2, 3, 4]:
+        elif type in [0, 1, 2]:
             file_list = []
             for tfcst, tensb in itertools.product(fcst, ensb):
                 tday = int(type)
