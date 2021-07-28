@@ -20,5 +20,7 @@ dependencies:
 #
   - numpy
   - xarray
-
+  - bottleneck
+  - dask
+  - netcdf4
 

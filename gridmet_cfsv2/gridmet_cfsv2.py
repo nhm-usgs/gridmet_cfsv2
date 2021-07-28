@@ -216,6 +216,7 @@ class Gridmet():
         fcst = ('00', '06', '12', '18')
         ensb = ('1', '2', '3', '4')
         day = ('0', '1', '2')
+        files = []
         if type == 4:
             fext = '_median.nc'
             dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + '.nc'
@@ -230,18 +231,23 @@ class Gridmet():
             return xr.open_dataset(gname)
 
         elif type == 3:
-            for tfcst, tensb, tday in itertools.product(fcst, ensb, day):
+            for index, (tday, tensb, tfcst) in enumerate(itertools.product(day, ensb, fcst)):
                 # print(tfcst,tensb, tday)
                 fext = f'_{tfcst}_{tensb}_{tday}.nc'
+                fext2 = f'_{tfcst}_{tensb}_{tday}_{index}.nc'
                 dsname = cls.SOURCE + cls.PATH[name] + cls.NCF_NAME[name] + fext
-                fname = cls.NCF_NAME[name] + fext
+                fname = cls.NCF_NAME[name] + fext2
 
                 fobj = xr.open_dataset(dsname+'#fillmismatch', engine='netcdf4', mask_and_scale=True)
                 fobj.to_netcdf(cache_dir / fname)
                 fobj.close()
+                fullname = cache_dir / fname
+                files.append(fullname)
             gname = str(cache_dir / (cls.NCF_NAME[name] + '_[0-9]*.nc'))
-            paths = glob.glob(gname)
-            return xr.open_mfdataset(paths, combine='nested', concat_dim='time')
+            # paths = sorted(glob.glob(gname))
+            
+            print(files)
+            return xr.open_mfdataset(files, combine='nested', concat_dim='time')
 
         elif type in [0, 1, 2]:
             file_list = []
